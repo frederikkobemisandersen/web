@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^dump/', include('mftutor.dump.urls')),
     url(r'^browser/', include('mftutor.browser.urls')),
     url(r'^tutorhold/', include('mftutor.rusclass.urls')),
+    url(r'^gallery/', include('mftutor.gallery.urls')),
 )
 
 try:

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}{{ album.gfyear }} / {{ album.title }}{% endblock title %}
+
+{% block canonical_url %}{% url 'album' gfyear=album.gfyear album_slug=album.slug %}{% endblock canonical_url %}
+
+{% block opengraph %}
+  <meta property="og:image" content="{{ STATIC_URL }}TKlogo.jpg" />
+{% endblock opengraph %}
+
+{% block content %}
+<!--
+{% for file in files %}https://{{ request.get_host }}{{ file.file.url }}
+{% endfor %}
+-->
+{% if edit_visibility_link %}
+<p><a href="{{ edit_visibility_link }}">BEST: Udvælg billeder</a></p>
+<p>{{ visible_count }} synlig{{ visible_count|pluralize:'e' }}
+og {{ hidden_count }} skjult{{ hidden_count|pluralize:'e' }}
+hvoraf {{ new_count }} er ny{{ new_count|pluralize:'e' }}.
+</p>
+<form onsubmit="return confirm('Er du sikker på at du vil offentliggøre alle nye billeder i albummet?')" method="post">
+    {% csrf_token %}
+    <input name="set_all_new_visible" type="submit" value="Gør alle nye billeder synlige" style="background-color: transparent" />
+</form>
+{% endif %}
+<div class="row">
+  <div class="col-xs-12 col-sm-7">
+    <ol class="breadcrumb imagetitle">
+      <li><a href="{% url 'gfyear' gfyear=album.gfyear  %}">{{ album.gfyear }}</a></li>
+      <li class="active">{{ album.title }}</li>
+    </ol>
+  </div>
+  <div class="col-xs-12 col-sm-5 text-right">
+      <p class="imagetitle">
+          {{ files|length }} billede{{ files|length|pluralize:"r" }}{% if album.publish_date %} fra d. {{ album.publish_date }}{% endif %}
+      </p>
+  </div>
+</div>
+<div class="row">
+  {% for file in files %}
+  <div class="col-xs-6 col-sm-4 col-md-3">
+    <a class="thumbnail" href="{% url 'image' gfyear=album.gfyear album_slug=album.slug image_slug=file.slug %}" alt="Se billede">
+      {% if file %}
+        {% if file.file.crop.253x253.url %}
+          <img src="{{ file.file.crop.253x253.url }}" alt="{{ album.title }}" />
+        {% else %}
+          <div class="placeholder253x253">
+            <p>{% bootstrap_icon "file" %}</p>
+          </div>
+        {% endif %}
+      {% else %}
+        <p>Albummet '{{ album.title }}' har ingen billeder endnu.</p>
+      {% endif %}
+    </a>
+  </div> <!-- col-xs-6 -->
+  {% endfor %}
+  <div class="col-xs-12">
+    <a href="{% url 'gfyear' gfyear=album.gfyear  %}">Tilbage til {{ album.gfyear }}</a>
+  </div>
+</div> <!-- row -->
+{% endblock content%}

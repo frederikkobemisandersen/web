@@ -4,7 +4,6 @@ from django.conf import global_settings
 # Django settings for mftutor project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -119,12 +118,6 @@ ROOT_URLCONF = 'mftutor.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'mftutor.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, "mftutor/templates"),
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -141,6 +134,11 @@ INSTALLED_APPS = (
     'django_wysiwyg',
     'debug_toolbar',
     'sorl.thumbnail',
+    'constance',
+    'constance.backends.database',
+    'jfu',
+    'versatileimagefield',
+    'bootstrap3',
 
     'mftutor.tutor',
     'mftutor.news',
@@ -158,7 +156,51 @@ INSTALLED_APPS = (
     'mftutor.dump',
     'mftutor.rusclass',
     'mftutor.signup',
+    'mftutor.gallery',
 )
+
+# Templates
+# ---------
+
+TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.join(BASE_DIR, 'mftutor/templates')],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'constance.context_processors.config',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.request',
+                    'django.template.context_processors.static',
+                    'mftutor.rus.context_processors.rus_data',
+                    'mftutor.tutor.context_processors.login_form',
+                    'mftutor.tutor.context_processors.tutor_data',
+                    'mftutor.tutor.context_processors.settings',
+                    'mftutor.events.context_processors.site',
+                    ],
+                'debug': DEBUG,
+                # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+                # Always use forward slashes, even on Windows.
+                # Don't forget to use absolute paths, not relative paths.
+
+                },
+            },
+        ]
+
+# Thumbnails
+# ----------
+
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+        'gallery': [
+            ('gallery_253', 'crop__253x253'),
+            ('image_400', 'thumbnail__400x400'),
+            ('image_720', 'thumbnail__720x720'),
+            ('image_940', 'thumbnail__940x940'),
+            ('image_1140', 'thumbnail__1140x1140'),
+            ('image_2280', 'thumbnail__2280x2280'),
+            ],
+        }
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -190,14 +232,6 @@ LOGGING = {
 }
 
 AUTH_PROFILE_MODULE = 'tutor.TutorProfile'
-
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-    "mftutor.rus.context_processors.rus_data",
-    "mftutor.tutor.context_processors.login_form",
-    "mftutor.tutor.context_processors.tutor_data",
-    "mftutor.tutor.context_processors.settings",
-    "mftutor.events.context_processors.site",
-)
 
 LOGIN_REDIRECT_URL = "/"
 
@@ -249,3 +283,12 @@ GF_GROUPS = ('best', 'koor', 'webfar', 'oekonomi', 'gris')
 
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.dbm_kvstore.KVStore'
 THUMBNAIL_DBM_FILE = '/home/mftutor/web/thumbnails/thumbnail_kvstore'
+
+# Constance
+# ---------
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'YEAR': (2018,
+               'Det nuværende tutorår'),
+    }
