@@ -17,6 +17,8 @@
    <ul>
     {% if tutor.nickname %}
     <li title="Kaldenavn" class="nickname">"{{ tutor.nickname }}"</li>
+    {% else %}
+    <li title="Kaldenavn" class="nickname"></li>
     {% endif %}
     <li title="Adresse" class="street">{{ tutor.street }}</li>
     <li title="By" class="city">{{ tutor.city }}</li>

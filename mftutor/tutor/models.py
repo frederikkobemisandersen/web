@@ -18,8 +18,7 @@ from mftutor.tutor import tutorpicture_upload_to
 # User data for the project that does not vary from year to year
 @python_2_unicode_compatible
 class TutorProfile(models.Model):
-    objects = TutorProfileManager()
-
+    objects = TutorProfileManager() 
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(
         User, null=True, blank=True, on_delete=models.SET_NULL)

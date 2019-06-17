@@ -9,7 +9,7 @@ from mftutor.shirt.views import SelectShirt
 
 class ProfileForm(forms.Form):
     name = forms.CharField(label='Navn')
-    nickname = forms.CharField(label='Kaldenavn')
+    nickname = forms.CharField(label='Kaldenavn', required=False)
     street = forms.CharField(label='Gade')
     city = forms.CharField(label='Postnr. og by')
     phone = forms.CharField(label='Telefon')
